@@ -34,10 +34,10 @@ std::tuple<bool, long double> Sphere::intersect(const Vector3 &origin, const Vec
 	auto [solutionsN, t1, t2] = solveQuadratic(a, b, c);
 
 	if (solutionsN == SolutionsNumber::e_oneRoot)
-		return {true, t1};
+		return {true, std::abs(t1)};
 
 	if (solutionsN == SolutionsNumber::e_twoRoots)
-		return {true, (std::abs(t1) < std::abs(t2)) ? t1 : t2};
+		return {true, (std::abs(t1) < std::abs(t2)) ? std::abs(t1) : std::abs(t2)};
 	
 	return {false, 0};
 }

@@ -40,5 +40,5 @@ Vector3 operator-(const Vector3 &vec1, const Vector3 &vec2);
 Vector3 operator-(const Vector3 &vec);
 
 long double cos(const Vector3 &vec1, const Vector3 &vec2);
-Vector3 reflect(const Vector3 &vec, const Vector3 &norm);
-Vector3 refract(const Vector3 &vec, const Vector3 &norm, long double n1, long double n2);
+Vector3 reflect(const Vector3 &direction, const Vector3 &normal);
+Vector3 refract(const Vector3 &direction, const Vector3 &normal, long double n1, long double n2);

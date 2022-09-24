@@ -10,7 +10,7 @@ Vector3::Vector3(long double x, long double y, long double z):
 }
 
 Vector3::Vector3(long double x0, long double y0, long double z0,
-	           long double x1, long double y1, long double z1):
+	             long double x1, long double y1, long double z1):
 	x_(x1 - x0),
 	y_(y1 - y0),
 	z_(z1 - z0)
@@ -28,6 +28,9 @@ Vector3 &Vector3::operator*=(long double scale)
 	x_ *= scale;
 	y_ *= scale;
 	z_ *= scale;
+
+	length_ = sqrtl(powl(x_, 2) + powl(y_, 2) + powl(z_, 2));
+
 	return *this;
 }
 
@@ -53,6 +56,9 @@ Vector3 &Vector3::operator+=(const Vector3 &vec)
 	x_ += vec.x();
 	y_ += vec.y();
 	z_ += vec.z();
+
+	length_ = sqrtl(powl(x_, 2) + powl(y_, 2) + powl(z_, 2));
+
 	return *this;
 }
 
@@ -68,6 +74,9 @@ Vector3 &Vector3::operator-=(const Vector3 &vec)
 	x_ -= vec.x();
 	y_ -= vec.y();
 	z_ -= vec.z();
+
+	length_ = sqrtl(powl(x_, 2) + powl(y_, 2) + powl(z_, 2));
+
 	return *this;	
 }
 
@@ -125,28 +134,29 @@ long double cos(const Vector3 &vec1, const Vector3 &vec2)
 	return compare(denominator, 0.0) ? INFINITY : numerator / denominator;
 }
 
-Vector3 reflect(const Vector3 &vec, const Vector3 &norm)
+Vector3 reflect(const Vector3 &direction, const Vector3 &normal)
 {
-	return normalized(vec) + normalized(norm) * 2.0 * cos(vec, norm);
+	if (cos(direction, normal) > 0)
+		return reflect(direction, -normal	);
+
+	return normalized(direction) + normalized(normal) * 2.0 * cos(direction, normal);
 }
 
-Vector3 refract(const Vector3 &vec, const Vector3 &norm, long double n1, long double n2)
+Vector3 refract(const Vector3 &direction, const Vector3 &normal, long double n1, long double n2)
 {
-	if (cos(norm, vec) < 0)
-		return refract(vec, -norm, n1, n2);
+	if (cos(normal, direction) < 0)
+		return refract(direction, -normal, n1, n2);
 
-	long double cosAlpha = cos(norm, vec);
+	long double cosAlpha = cos(normal, direction);
 	long double cosBeta  = cosAlpha * n1 / n2;
 
-	if (cosAlpha < cosBeta) {
-		long double temp = cosAlpha;
-		cosAlpha = cosBeta;
-		cosBeta  = temp;
-	}
+	/* We want alpha to be the bigger angle */
+	if (cosAlpha > cosBeta)
+		std::swap(cosAlpha, cosBeta);
 
 	long double sinAlpha = sqrtl(1 - cosAlpha * cosAlpha);
 	long double sinBeta  = sqrtl(1 - cosBeta  * cosBeta);
 	long double coeff    = sinBeta / (sinAlpha * cosBeta - cosAlpha * sinBeta);
 
-	return normalized(vec) * coeff + normalized(norm);
+	return normalized(direction) * coeff + normalized(normal);
 }
