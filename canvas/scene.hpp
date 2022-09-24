@@ -58,8 +58,7 @@ private:
     std::tuple<bool, Vector3, Vector3, Material> intersect(const Vector3 &origin, const Vector3 &direction) const;
 
 public:
-    Scene(const Canvas *canvas, const LightSource &lightSource = LightSource(1.0, 1.0, -1.0), 
-          const Camera &viewpoint = Camera(0.0, 0.0, 0.0));
+    Scene(const Canvas *canvas, const Camera &camera = Camera(0.0, 0.0, 0.0));
     Scene(const Scene &scene) = delete;
     Scene operator=(const Scene &scene) = delete;
     ~Scene();

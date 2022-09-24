@@ -1,6 +1,6 @@
 #include "maths.hpp"
 
-int compare(long double n1, long double n2)
+int equals(long double n1, long double n2)
 {
-	return (n1 - n2) < PRECISION;
+	return fabsl(n1 - n2) < EPSILON;
 }

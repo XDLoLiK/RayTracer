@@ -1,5 +1,7 @@
 #pragma once
 
-const long double PRECISION = 1e-9;
+#include <cmath>
 
-int compare(long double n1, long double n2);
+const long double EPSILON = 1e-12;
+
+int equals(long double n1, long double n2);

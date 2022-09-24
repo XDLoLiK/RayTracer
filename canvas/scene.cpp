@@ -1,11 +1,10 @@
 #include "scene.hpp"
 
-Scene::Scene(const Canvas *canvas, const LightSource &lightSource, 
-             const Camera &camera):
+Scene::Scene(const Canvas *canvas, const Camera &camera):
     canvas_(canvas),
     camera_(camera)
 {
-    this->addLightSource(lightSource);
+
 }
 
 Scene::~Scene()
@@ -61,9 +60,12 @@ Color Scene::traceRay(const Vector3 &origin, const Vector3 &direction, int depth
     for (unsigned long n = 0; n < lightSourcesList_.size(); n++) {
         Vector3 lightDirection = lightSourcesList_.at(n).position() - point;
         
-        // auto [hasObstacle, obstaclePoint, obstacleNormal, obstacleMaterial] = intersect(point, lightDirection);
-        // if (hasObstacle && (obstaclePoint - point).length() < (lightSourcesList_.at(n).position() - point).length())
-            // continue;
+        auto [hasObstacle, obstaclePoint, obstacleNormal, obstacleMaterial] = intersect(point, lightDirection);
+        long double obstacleDistance    = (obstaclePoint - point).length();
+        long double lightSourceDistance = (lightSourcesList_.at(n).position() - point).length();
+
+        if (hasObstacle && obstacleDistance < lightSourceDistance && !equals(obstacleDistance, 0.0l))
+            continue;
 
         long double lightIntensity = lightSourcesList_.at(n).intensity();
         long double cosDiffuse     = cos(normal, lightDirection);
@@ -73,8 +75,8 @@ Color Scene::traceRay(const Vector3 &origin, const Vector3 &direction, int depth
         specularIntensity += lightIntensity * powl(std::max(0.0l, cosSpecular), material.specularExponent());
     }
 
-    return material.color() * diffuseIntensity  * material.diffuseCoeff () +
-                              specularIntensity * material.specularCoeff() +
+    return material.color() * diffuseIntensity  * material.diffuseCoeff ()  +
+                              specularIntensity * material.specularCoeff()  +
                               reflectedColor    * material.reflectCoeff ();
 }
 

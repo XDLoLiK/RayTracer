@@ -131,13 +131,13 @@ long double cos(const Vector3 &vec1, const Vector3 &vec2)
 {
 	long double numerator   = vec1.x() * vec2.x() + vec1.y() * vec2.y() + vec1.z() * vec2.z();
 	long double denominator = vec1.length() * vec2.length();
-	return compare(denominator, 0.0) ? INFINITY : numerator / denominator;
+	return equals(denominator, 0.0) ? INFINITY : numerator / denominator;
 }
 
 Vector3 reflect(const Vector3 &direction, const Vector3 &normal)
 {
 	if (cos(direction, normal) > 0)
-		return reflect(direction, -normal	);
+		return reflect(direction, -normal);
 
 	return normalized(direction) + normalized(normal) * 2.0 * cos(direction, normal);
 }

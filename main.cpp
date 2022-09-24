@@ -5,17 +5,15 @@
  * -Custom background for scene
  * -Custom frame position for scene
  * -Objects, frame and camera rotation
- * -Fix specular lighting
- * -Refactor class Color
  * -Add refraction (best way to implement - ???)
  */
 
 int main()
 {
 	Canvas canvas(600, 600);
-	Scene  scene(&canvas, 
-		         Scene::LightSource(0.5, 0.5, -0.25),
-		         Scene::Camera(0.0, 0.0, 1.0));
+	Scene  scene(&canvas, Scene::Camera(0.0, 0.0, 1.0));
+
+	scene.addLightSource(Scene::LightSource( 0.5,  0.5, -0.25));
 	scene.addLightSource(Scene::LightSource(-0.5, -0.5, -0.5));
 
 	Sphere sphere1(0.0, 0.0, -1.0, 0.5, redRubber);

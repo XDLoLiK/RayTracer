@@ -20,7 +20,7 @@ Sphere::Sphere(const Vector3 &vec, long double r,
 
 Sphere::~Sphere()
 {
-	radius_ = 0.0;
+	radius_ = 0.0l;
 }
 
 std::tuple<bool, long double> Sphere::intersect(const Vector3 &origin, const Vector3 &direction) const
@@ -48,19 +48,19 @@ std::tuple<enum Sphere::SolutionsNumber, long double, long double> Sphere::solve
 {
 	long double t1 = NAN, t2 = NAN;
 
-	if (compare(a, 0.0) && compare(b, 0.0))
-		return compare(c, 0.0) ? std::make_tuple(e_infRoots, t1, t2) : std::make_tuple(e_noRoots, t1, t2);
+	if (equals(a, 0.0l) && equals(b, 0.0l))
+		return equals(c, 0.0l) ? std::make_tuple(e_infRoots, t1, t2) : std::make_tuple(e_noRoots, t1, t2);
 
-	if (compare(a, 0.0) && !compare(b, 0.0))
+	if (equals(a, 0.0l) && !equals(b, 0.0l))
 		return {e_oneRoot, t1 = -c / b, t2};
 
 	long double discriminant2 = b * b - 4 * a * c;
 
-	if (discriminant2 < 0)
-		return {e_noRoots, t1, t2};
-
-	if (compare(discriminant2, 0.0))
+	if (equals(discriminant2, 0.0l))
 		return {e_oneRoot, t1 = -b / (2 * a), t2 = -b / (2 * a)};
+
+	if (discriminant2 < 0.0l)
+		return {e_noRoots, t1, t2};
 
 	t1 = (-b + sqrtl(discriminant2)) / (2 * a);
 	t2 = (-b - sqrtl(discriminant2)) / (2 * a);
