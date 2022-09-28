@@ -15,11 +15,6 @@ Material::Material(const Color &color,
 
 }
 
-Material::~Material()
-{
-	refractiveIndex_ = specularExponent_ = 0.0l;
-}
-
 long double Material::refractiveIndex() const
 {
 	return refractiveIndex_;

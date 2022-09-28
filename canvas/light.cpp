@@ -20,11 +20,6 @@ Scene::LightSource::LightSource(const Vector3 &position, const Color &color,
 
 }
 
-Scene::LightSource::~LightSource()
-{
-	intensity_ = 0.0;
-}
-
 const Vector3 &Scene::LightSource::position() const
 {
 	return position_;

@@ -18,7 +18,6 @@ public:
 		     long double refractiveIndex = 1.0, long double specularExponent = 1.0,
              long double diffuseCoeff    = 1.0, long double specularCoeff    = 1.0,
              long double reflectCoeff    = 1.0, long double refractCoeff     = 1.0);
-	~Material();
 
 	const Color &color           () const;
 	long double refractiveIndex  () const;
@@ -29,6 +28,7 @@ public:
 	long double refractCoeff     () const;
 };
 
-const Material   redRubber = Material(red,   1.0, 10.0, 1.4, 0.3, 0.0, 0.0);
-const Material greenRubber = Material(green, 1.0, 10.0, 1.4, 0.3, 0.0, 0.0);
-const Material  blueRubber = Material(blue,  1.0, 10.0, 1.4, 0.3, 0.0, 0.0);
+#define rubber(color) Material(color, 1.0, 10.0,   1.4, 0.3,  0.0, 0.0)
+#define  glass(color) Material(color, 1.5, 125.0,  0.0, 0.9,  0.1, 0.8)
+#define mirror(color) Material(color, 1.0, 1425.0, 0.0, 16.0, 0.9, 0.0)
+#define  ivory(color) Material(color, 1.0, 50.0,   0.9, 0.5,  0.1, 0.0)

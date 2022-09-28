@@ -1,8 +1,8 @@
 #pragma once
 
 #include "canvas.hpp"
-#include "sphere.hpp"
 #include "vector.hpp"
+#include "baseobj.hpp"
 
 #include <vector>
 #include <tuple>
@@ -19,7 +19,6 @@ public:
         Camera(long double x, long double y,
                long double z);
         Camera(const Vector3 &vec);
-        ~Camera();
 
         /* Getters */
         const Vector3 &position() const;
@@ -38,7 +37,6 @@ public:
                     long double intensity = 1.0);
         LightSource(const Vector3 &position, const Color &color = Color(1.0, 1.0, 1.0, 1.0), 
                     long double intensity = 1.0);
-        ~LightSource();
 
         /* Getters */
         const Vector3 &position () const;
@@ -51,8 +49,8 @@ private:
     const Canvas *canvas_ = nullptr;
     Camera camera_ = Camera(0.0, 0.0, 0.0);
 
-    std::vector<LightSource> lightSourcesList_ = std::vector<LightSource> (0, LightSource(1.0, 1.0, -1.0));
-    std::vector<Object *>    objectsList_      = std::vector<Object *>    (0);
+    std::vector<LightSource>    lightSourcesList_ = std::vector<LightSource>    (0, LightSource(1.0, 1.0, -1.0));
+    std::vector<const Object *> objectsList_      = std::vector<const Object *> (0);
 
     Color traceRay(const Vector3 &origin, const Vector3 &direction, int depth = 1) const;
     std::tuple<bool, Vector3, Vector3, Material> intersect(const Vector3 &origin, const Vector3 &direction) const;
@@ -64,12 +62,12 @@ public:
     ~Scene();
 
     void render();
-    void addObject(Object *obj);
+    void addObject(const Object *obj);
     void addLightSource(const LightSource &lightSource);
 
     /* Getters */
-    const std::vector<Object *>    &objectsList()      const;
-    const std::vector<LightSource> &lightSourcesList() const;
-    const Camera                   &camera()           const;
-    const Canvas                   *canvas()           const;
+    const std::vector<const Object *> &objectsList()      const;
+    const std::vector<LightSource>    &lightSourcesList() const;
+    const Camera                      &camera()           const;
+    const Canvas                      *canvas()           const;
 };

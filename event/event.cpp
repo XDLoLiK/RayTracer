@@ -5,15 +5,6 @@ Event::Event()
 
 }
 
-Event::~Event()
-{
-    type_   = SDL_QUIT;
-    key_    = {};
-    motion_ = {};
-    button_ = {};
-    wheel_  = {};
-}
-
 int Event::poll()
 {
     SDL_Event event = {};

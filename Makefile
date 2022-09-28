@@ -1,4 +1,4 @@
-SRC_DIRS := . canvas event objects objects/color objects/material vector common
+SRC_DIRS := . canvas event objects objects/sphere objects/plane objects/color objects/material vector common
 VPATH += $(SRC_DIRS)
 
 INC_DIRS := include
@@ -13,7 +13,7 @@ OBJ := $(addprefix $(BIN_DIR)/, $(patsubst %.cpp, %.o, $(notdir $(SRC))))
 CXX := g++
 CXX_FLAGS := $(addprefix -I, $(INC_DIRS)) $(addprefix -I, $(SRC_DIRS))
 
-CXX_FLAGS += -D _DEBUG -ggdb3 -std=c++17 -O0 -Wall -Wextra -Weffc++ -Waggressive-loop-optimizations\
+CXX_FLAGS += -D _DEBUG -ggdb3 -std=c++17 -O3 -Wall -Wextra -Weffc++ -Waggressive-loop-optimizations\
 -Wc++14-compat -Wmissing-declarations -Wcast-align -Wcast-qual -Wchar-subscripts -Wconditionally-supported\
 -Wconversion -Wctor-dtor-privacy -Wempty-body -Wfloat-equal -Wformat-nonliteral -Wformat-security\
 -Wformat-signedness -Wformat=2 -Winline -Wlogical-op -Wnon-virtual-dtor -Wopenmp-simd -Woverloaded-virtual\
@@ -36,7 +36,10 @@ $(BIN_DIR)/%.o: %.cpp
 
 -include $(wildcard $(BIN_DIR)/*.d)
 
-.PHONY: prepare clean info 
+.PHONY: prepare clean info run
+
+run:
+	@$(APPLICATION)
 
 prepare:
 	@mkdir -p $(BUILD_DIR)

@@ -18,11 +18,6 @@ Vector3::Vector3(long double x0, long double y0, long double z0,
 
 }
 
-Vector3::~Vector3()
-{
-	x_ = y_ = z_ = length_ = 0.0;
-}
-
 Vector3 &Vector3::operator*=(long double scale)
 {
 	x_ *= scale;
@@ -46,9 +41,18 @@ Vector3 operator*(long double num, const Vector3 &vec)
 	return vec * num;
 }
 
-long double operator*(const Vector3 &vec1, const Vector3 &vec2)
+long double dotProduct(const Vector3 &vec1, const Vector3 &vec2)
 {
 	return vec1.x() * vec2.x() + vec1.y() * vec2.y() + vec1.z() * vec2.z();
+}
+
+Vector3 crossProduct(const Vector3 &vec1, const Vector3 &vec2)
+{
+	long double newX = vec1.y() * vec2.z() - vec1.z() * vec2.y();
+	long double newY = vec1.z() * vec2.x() - vec1.x() * vec2.z();
+	long double newZ = vec1.x() * vec2.y() - vec1.y() * vec2.x();
+
+	return Vector3(newX, newY, newZ);
 }
 
 Vector3 &Vector3::operator+=(const Vector3 &vec)
@@ -136,27 +140,22 @@ long double cos(const Vector3 &vec1, const Vector3 &vec2)
 
 Vector3 reflect(const Vector3 &direction, const Vector3 &normal)
 {
-	if (cos(direction, normal) > 0)
-		return reflect(direction, -normal);
-
 	return normalized(direction) + normalized(normal) * 2.0 * cos(direction, normal);
 }
 
 Vector3 refract(const Vector3 &direction, const Vector3 &normal, long double n1, long double n2)
 {
-	if (cos(normal, direction) < 0)
-		return refract(direction, -normal, n1, n2);
+	if (equals(n1, 0.0) || equals(n2, 0.0))
+		return Vector3(0.0, 0.0, 0.0);
 
 	long double cosAlpha = cos(normal, direction);
-	long double cosBeta  = cosAlpha * n1 / n2;
+	if (cosAlpha > 0)
+		return refract(direction, -normal, n2, n1);
 
-	/* We want alpha to be the bigger angle */
-	if (cosAlpha > cosBeta)
-		std::swap(cosAlpha, cosBeta);
+	long double relation = n2 / n1;
+	long double coeff    = 1 - relation * relation * (1 - cosAlpha * cosAlpha);
 
-	long double sinAlpha = sqrtl(1 - cosAlpha * cosAlpha);
-	long double sinBeta  = sqrtl(1 - cosBeta  * cosBeta);
-	long double coeff    = sinBeta / (sinAlpha * cosBeta - cosAlpha * sinBeta);
-
-	return normalized(direction) * coeff + normalized(normal);
+	if (coeff < 0)
+		return Vector3(1.0, 0.0, 0.0);
+	return normalized(direction) * relation + normalized(normal) * (relation * cosAlpha - sqrtl(coeff));
 }

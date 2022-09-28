@@ -13,11 +13,6 @@ Scene::Camera::Camera(const Vector3 &vec):
 
 }
 
-Scene::Camera::~Camera()
-{
-
-}
-
 const Vector3 &Scene::Camera::position() const
 {
 	return position_;

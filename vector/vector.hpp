@@ -15,11 +15,10 @@ private:
 public:
 	Vector3(long double x,  long double y,  long double z);
 	Vector3(long double x0, long double y0, long double z0,
-		   long double x1, long double y1, long double z1);
+		    long double x1, long double y1, long double z1);
 	Vector3 &operator*=(long double scale);
 	Vector3 &operator+=(const Vector3 &vec);
 	Vector3 &operator-=(const Vector3 &vec);
-	~Vector3();
 
 	void normalize();
 
@@ -34,11 +33,12 @@ Vector3 normalized(const Vector3 &vec);
 
 Vector3 operator*(const Vector3 &vec, long double num);
 Vector3 operator*(long double num, const Vector3 &vec);
-long double operator*(const Vector3 &vec1, const Vector3 &vec2);
+long double dotProduct(const Vector3 &vec1, const Vector3 &vec2);
+Vector3 crossProduct(const Vector3 &vec1, const Vector3 &vec2);
 Vector3 operator+(const Vector3 &vec1, const Vector3 &vec2);
 Vector3 operator-(const Vector3 &vec1, const Vector3 &vec2);
 Vector3 operator-(const Vector3 &vec);
 
 long double cos(const Vector3 &vec1, const Vector3 &vec2);
 Vector3 reflect(const Vector3 &direction, const Vector3 &normal);
-Vector3 refract(const Vector3 &direction, const Vector3 &normal, long double n1, long double n2);
+Vector3 refract(const Vector3 &direction, const Vector3 &normal, long double n1, long double n2 = 1.0);

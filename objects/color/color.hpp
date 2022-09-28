@@ -19,7 +19,6 @@ public:
     Color &operator+=(long double num);
     Color &operator-=(long double num);
     Color &operator*=(long double num);
-    ~Color();
 
     long double red()   const;
     long double green() const;

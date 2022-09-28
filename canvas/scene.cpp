@@ -46,13 +46,13 @@ Color Scene::traceRay(const Vector3 &origin, const Vector3 &direction, int depth
 {
     auto [intersects, point, normal, material] = intersect(origin, direction);
     if (depth > 5 || !intersects)
-        return grey; /* background color */
+        return white; /* background color */
 
-    Vector3 reflectedDir = normalized(reflect(direction, normal));
-    // Vector3 refractedDir = normalized(refract(direction, normal, 1.0, 0.5));
+    Vector3 reflectedDir = reflect(direction, normal);
+    Vector3 refractedDir = refract(direction, normal, material.refractiveIndex());
 
     Color reflectedColor = traceRay(point, reflectedDir, depth + 1);
-    // Color refractedColor = traceRay(point, refractedDir, depth + 1);
+    Color refractedColor = traceRay(point, refractedDir, depth + 1);
 
     long double diffuseIntensity  = 0.0l;
     long double specularIntensity = 0.0l;
@@ -64,7 +64,7 @@ Color Scene::traceRay(const Vector3 &origin, const Vector3 &direction, int depth
         long double obstacleDistance    = (obstaclePoint - point).length();
         long double lightSourceDistance = (lightSourcesList_.at(n).position() - point).length();
 
-        if (hasObstacle && obstacleDistance < lightSourceDistance && !equals(obstacleDistance, 0.0l))
+        if (hasObstacle && obstacleDistance < lightSourceDistance)
             continue;
 
         long double lightIntensity = lightSourcesList_.at(n).intensity();
@@ -77,18 +77,19 @@ Color Scene::traceRay(const Vector3 &origin, const Vector3 &direction, int depth
 
     return material.color() * diffuseIntensity  * material.diffuseCoeff ()  +
                               specularIntensity * material.specularCoeff()  +
-                              reflectedColor    * material.reflectCoeff ();
+                              reflectedColor    * material.reflectCoeff ()  +
+                              refractedColor    * material.refractCoeff ();
 }
 
 std::tuple<bool, Vector3, Vector3, Material> Scene::intersect(const Vector3 &origin, const Vector3 &direction) const
 {
     long double minDistance = INFINITY;
-    Object *closestObject   = nullptr;
+    const Object *closestObject   = nullptr;
 
     for (unsigned long n = 0; n < objectsList_.size(); n++) {
         auto [intersects, t] = objectsList_.at(n)->intersect(origin, direction);
 
-        if (intersects && t < minDistance) {
+        if (intersects && t < minDistance && !equals(t, 0.0)) {
             minDistance = t;
             closestObject = objectsList_.at(n);
         }
@@ -107,12 +108,12 @@ void Scene::addLightSource(const LightSource &lightSource)
     lightSourcesList_.push_back(lightSource);
 }
 
-void Scene::addObject(Object *obj)
+void Scene::addObject(const Object *obj)
 {
     objectsList_.push_back(obj);
 }
 
-const std::vector<Object *> &Scene::objectsList() const
+const std::vector<const Object *> &Scene::objectsList() const
 {
     return objectsList_;
 }

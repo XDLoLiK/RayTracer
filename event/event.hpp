@@ -14,7 +14,6 @@ private:
 
 public:
     Event();
-    ~Event();
 
     int poll();
 

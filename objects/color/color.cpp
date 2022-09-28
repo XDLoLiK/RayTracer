@@ -1,6 +1,6 @@
 #include "color.hpp"
 
-Color::Color(long double red, long double green, 
+Color::Color(long double red,  long double green, 
              long double blue, long double alpha):
     red_  ((red   > 1.0) ? 1.0 : (red   < 0.0) ? 0.0 : red),
     green_((green > 1.0) ? 1.0 : (green < 0.0) ? 0.0 : green),
@@ -8,14 +8,6 @@ Color::Color(long double red, long double green,
     alpha_((alpha > 1.0) ? 1.0 : (alpha < 0.0) ? 0.0 : alpha)
 {
 
-}
-
-Color::~Color()
-{
-    red_   = 1.0;
-    green_ = 1.0;
-    blue_  = 1.0;
-    alpha_ = 1.0;
 }
 
 long double Color::red() const
