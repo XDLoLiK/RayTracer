@@ -22,7 +22,7 @@ CXX_FLAGS += -D _DEBUG -ggdb3 -std=c++17 -O3 -Wall -Wextra -Weffc++ -Waggressive
 -Wswitch-default -Wswitch-enum -Wsync-nand -Wundef -Wunreachable-code -Wunused -Wuseless-cast -Wvariadic-macros\
 -Wno-literal-suffix -Wno-missing-field-initializers -Wno-narrowing -Wno-old-style-cast -Wno-varargs -Wstack-protector\
 -fcheck-new -fsized-deallocation -fstack-protector -fstrict-overflow -flto-odr-type-merging -fno-omit-frame-pointer\
--Wlarger-than=8192 -Wstack-usage=8192 -pie -fPIE -fopenmp
+-Wlarger-than=8192 -Wstack-usage=8192 -pie -fPIE
 
 SDL_FLAGS := -lSDL2main -lSDL2 -lSDL2_image -lSDL2_mixer
 
@@ -52,4 +52,3 @@ clean:
 info:
 	@echo [*] OBJ: $(OBJ)
 	@echo [*] SRC: $(SRC)
-

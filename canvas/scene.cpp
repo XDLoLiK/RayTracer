@@ -49,7 +49,7 @@ Color Scene::traceRay(const Vector3 &origin, const Vector3 &direction, int depth
         return white; /* background color */
 
     Vector3 reflectedDir = reflect(direction, normal);
-    Vector3 refractedDir = refract(direction, normal, material.refractiveIndex());
+    Vector3 refractedDir = refract(direction, normal, 1.0, material.refractiveIndex());
 
     Color reflectedColor = traceRay(point, reflectedDir, depth + 1);
     Color refractedColor = traceRay(point, refractedDir, depth + 1);
@@ -84,7 +84,7 @@ Color Scene::traceRay(const Vector3 &origin, const Vector3 &direction, int depth
 std::tuple<bool, Vector3, Vector3, Material> Scene::intersect(const Vector3 &origin, const Vector3 &direction) const
 {
     long double minDistance = INFINITY;
-    const Object *closestObject   = nullptr;
+    const Object *closestObject = nullptr;
 
     for (unsigned long n = 0; n < objectsList_.size(); n++) {
         auto [intersects, t] = objectsList_.at(n)->intersect(origin, direction);
