@@ -147,29 +147,18 @@ Vector3 reflect(const Vector3 &direction, const Vector3 &normal)
 	return direction + normal * 2.0 * dotProduct(direction, normal);
 }
 
-// Vector3 refract(const Vector3 &I, const Vector3 &N, long double eta_t, long double eta_i=1.f) { // Snell's law
-//     long double cosi = - std::max(-1.f, std::min(1.f, I*N));
-//     if (cosi<0) return refract(I, -N, eta_i, eta_t); // if the ray comes from the inside the object, swap the air and the media
-//     long double eta = eta_i / eta_t;
-//     long double k = 1 - eta*eta*(1 - cosi*cosi);
-//     return k<0 ? vec3{1,0,0} : I*eta + N*(eta*cosi - std::sqrt(k)); // k<0 = total reflection, no ray to refract. I refract it anyways, this has no physical meaning
-// }
+Vector3 refract(const Vector3 &direction, const Vector3 &normal, long double n1, long double n2) {
+    if (equals(n1, 0.0l) || equals(n2, 0.0l))
+    	return Vector3(0.0, 0.0, 0.0);
 
-Vector3 refract(const Vector3 &direction, const Vector3 &normal, long double n1, long double n2)
-{
-	if (equals(n1, 0.0l) || equals(n2, 0.0l))
-		return Vector3(0.0, 0.0, 0.0);
+    long double cosAlpha = -std::max(-1.0l, std::min(1.0l, dotProduct(direction, normal)));
+    if (cosAlpha < 0.0l)
+    	return refract(direction, -normal, n2, n1);
 
-	/* Assuming all vectors are normalized */
-	long double cosAlpha = dotProduct(normal, direction);
-	if (cosAlpha > 0.0l)
-		return refract(direction, -normal, n2, n1);
+    long double relation = n2 / n1;
+	long double coeff = 1 - relation * relation * (1 - cosAlpha * cosAlpha);
 
-	long double relation = n1 / n2;
-	Vector3 refractedPerp = relation * (direction + cosAlpha * normal);
-	
-	long double l = refractedPerp.length();
-	Vector3 refractedParallel = -sqrtl(1.0l - l * l) * normal;
-
-	return refractedPerp + refractedParallel;
+    if (coeff < 0.0l)
+    	return Vector3(1,0,0);
+    return direction * relation + normal * (relation * cosAlpha - sqrtl(coeff));
 }

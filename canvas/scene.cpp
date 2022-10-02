@@ -48,8 +48,8 @@ Color Scene::traceRay(const Vector3 &origin, const Vector3 &direction, int depth
     if (depth > 5 || !intersects)
         return white; /* background color */
 
-    Vector3 reflectedDir = reflect(direction, normal);
-    Vector3 refractedDir = refract(direction, normal, 1.0, material.refractiveIndex());
+    Vector3 reflectedDir = normalized(reflect(direction, normal));
+    Vector3 refractedDir = normalized(refract(direction, normal, material.refractiveIndex()));
 
     Color reflectedColor = traceRay(point, reflectedDir, depth + 1);
     Color refractedColor = traceRay(point, refractedDir, depth + 1);
